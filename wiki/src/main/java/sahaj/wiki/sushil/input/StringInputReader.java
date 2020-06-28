@@ -5,21 +5,19 @@ import java.util.Collections;
 import java.util.Map;
 
 import sahaj.sushil.utils.Builder;
+import sahaj.wiki.sushil.input.constant.InputElementType;
 
-public class StringInputReader implements InputReder {
-    private final InputType INPUT_TYPE = InputType.STRING;
-
+public class StringInputReader extends AbstractInputReader {
     @Override
-    public Map<InputElementType, ArrayList<String>> readInput(final String source) {
-        // TODO Auto-generated method stub
+    public Map<InputElementType, ArrayList<String>> _readInput(final String source) {
         return Collections.emptyMap();
     }
 
     public static class StringInputReaderBuilder implements Builder<StringInputReader> {
-        @Override
         public StringInputReader build() {
             // TODO Auto-generated method stub
             return null;
         }
+
     }
 }
