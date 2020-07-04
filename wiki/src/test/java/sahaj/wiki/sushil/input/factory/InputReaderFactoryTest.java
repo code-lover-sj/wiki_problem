@@ -10,9 +10,9 @@ import org.junit.rules.ExpectedException;
 import sahaj.wiki.sushil.input.InputReader;
 import sahaj.wiki.sushil.input.StringInputReader;
 import sahaj.wiki.sushil.input.exception.UnsupportedInputTypeException;
-import sahaj.wiki.sushil.input.factory.InputReaderFactory;
 
 public class InputReaderFactoryTest {
+    private static final String UNSUPPORTED_TYPE = "Sorry!!! Only STRING type is supported as of now.";
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -27,7 +27,7 @@ public class InputReaderFactoryTest {
     @Test
     public void testExceptionIsThrownForFileInputType() {
         expectedException.expect(UnsupportedInputTypeException.class);
-        expectedException.expectMessage("This input type is not yet supported.");
+        expectedException.expectMessage(UNSUPPORTED_TYPE);
 
         InputReaderFactory.getInputReader(FILE);
     }
@@ -35,7 +35,7 @@ public class InputReaderFactoryTest {
     @Test
     public void testExceptionIsThrownForURLInputType() {
         expectedException.expect(UnsupportedInputTypeException.class);
-        expectedException.expectMessage("This input type is not yet supported.");
+        expectedException.expectMessage(UNSUPPORTED_TYPE);
 
         InputReaderFactory.getInputReader(URL);
     }
