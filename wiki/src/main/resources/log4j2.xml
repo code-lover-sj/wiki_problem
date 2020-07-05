@@ -22,6 +22,9 @@
         <Logger name="sahaj.wiki.sushil.input.validator.InputValidator" level="debug" additivity="true">
             <appender-ref ref="fileLogger" level="debug" />
         </Logger>
+        <Logger name="sahaj.wiki.sushil.keyword.trie.Trie" level="debug" additivity="true">
+            <appender-ref ref="fileLogger" level="debug" />
+        </Logger>
         <Root level="debug" additivity="false">
             <appender-ref ref="console" />
         </Root>

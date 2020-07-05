@@ -29,4 +29,6 @@ public class Constants {
     public static final String DEF_ANSWER_DELIMITER = ";";
     public static final String DEF_QUE_DELIMITER = NEW_LINE;
     public static final String DEF_STMT_DELIMITER = "[.?!]+";
+
+    public static final String LEAF_TRIE_NODE = "LEAF";
 }
