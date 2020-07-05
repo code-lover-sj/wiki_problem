@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
-public class InputValidatorTest {
-    private final InputValidator validator = new InputValidator();
+public class InputValidatorImplTest {
+    private final InputValidatorImpl validator = new InputValidatorImpl();
 
     @Test
     public void testWithEmptyErrorListAndNullInput() {

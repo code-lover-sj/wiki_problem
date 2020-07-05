@@ -13,12 +13,12 @@ import sahaj.wiki.sushil.exception.ErrorMessageConsolidator;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
 import sahaj.wiki.sushil.input.constant.InputElementType;
 import sahaj.wiki.sushil.input.validator.InputValidator;
-import sahaj.wiki.sushil.validator.Validator;
+import sahaj.wiki.sushil.input.validator.InputValidatorImpl;
 
 public abstract class AbstractInputReader implements InputReader {
     private static final Logger logger = LogManager.getLogger(AbstractInputReader.class);
 
-    protected final Validator<String> validator = new InputValidator();
+    protected final InputValidator<String> validator = new InputValidatorImpl();
 
     protected abstract Map<InputElementType, ArrayList<String>> _readInput(String source);
 
