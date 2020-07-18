@@ -15,10 +15,10 @@ import sahaj.wiki.sushil.keyword.trie.LeafNode;
 import sahaj.wiki.sushil.keyword.trie.Trie;
 import sahaj.wiki.sushil.keyword.trie.TrieNode;
 
-public class AnswerTrieHolderTest {
+public class TrieBasedAnswerKeywordHolderTest {
     private static final String answer3 = "2";
 
-    private AnswerTrieHolder testSubject;
+    private TrieBasedAnswerKeywordHolder testSubject;
     private Trie<String> trie;
 
     @Before
@@ -41,8 +41,8 @@ public class AnswerTrieHolderTest {
         trie = null;
     }
 
-    private AnswerTrieHolder createTestSubject() {
-        return new AnswerTrieHolder();
+    private TrieBasedAnswerKeywordHolder createTestSubject() {
+        return new TrieBasedAnswerKeywordHolder();
     }
 
     @Test
@@ -53,8 +53,8 @@ public class AnswerTrieHolderTest {
 
     @Test
     public void testLeafNode() throws Exception {
-        final TrieNode<String> finalAnswerTerm = trie.findUnderRoot(answer3);
-        final TrieNode<String> leafNode = trie.find(finalAnswerTerm, LEAF_TRIE_NODE);
+        final TrieNode<String> finalAnswerTerm = trie.findUnderRoot(answer3.toLowerCase());
+        final TrieNode<String> leafNode = trie.find(finalAnswerTerm, LEAF_TRIE_NODE.toLowerCase());
         assertNotNull(leafNode);
         assertTrue(leafNode instanceof LeafNode);
         assertTrue(2 == ((LeafNode<String>) leafNode).getId());
@@ -65,6 +65,7 @@ public class AnswerTrieHolderTest {
         String searchTerm = "answer";
         TrieNode<String> searched = trie.findUnderRoot(searchTerm);
 
+
         assertNotNull(searched);
 
         searchTerm = "1";
@@ -73,7 +74,7 @@ public class AnswerTrieHolderTest {
 
         assertNotNull(searched);
 
-        searched = trie.find(searched, LEAF_TRIE_NODE);
+        searched = trie.find(searched, LEAF_TRIE_NODE.toLowerCase());
         assertNotNull(searched);
         assertTrue(1 == ((LeafNode<String>) searched).getId());
     }
