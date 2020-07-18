@@ -50,7 +50,7 @@ public class HashMapBasedQuestionKeywordHolder {
         for (String keyword : parsedQuestion) {
             keyword = keyword.toLowerCase();
 
-            if (keyword.endsWith(Constants.QUESTION_MARK)) {
+            if (!Character.isAlphabetic(keyword.charAt(keyword.length() - 1))) {
                 keyword = StringUtils.chop(keyword);
             }
 

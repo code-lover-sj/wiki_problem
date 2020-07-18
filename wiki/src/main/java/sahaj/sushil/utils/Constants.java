@@ -32,7 +32,7 @@ public class Constants {
     public static final String STATEMENT_DELIMITER = "statement_delimiter";
 
     public static final Set<String> COMMON_WORDS = Stream.of("the", "why", "where", "how", "when", "what", "which",
-            "and", "or", "are", "is", "were", "was", "as", "a").collect(Collectors.toSet());
+            "and", "or", "of", "are", "is", "were", "was", "as", "a", "with").collect(Collectors.toSet());
 
     public static final String DEF_ANSWER_DELIMITER = ";";
     public static final String DEF_QUE_DELIMITER = NEW_LINE;

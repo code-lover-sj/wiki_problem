@@ -30,7 +30,7 @@ public class HashMapBasedQuestionKeywordHolderTest {
         final String q1 = "What is the name of first Prime Minister of India?";
         final String q2 = "Who is known as the father of nation?";
         final String q3 = "Which bird is the national bird?";
-        final String q4 = "This is the random question with all common words - why where how when what which and or are is were was as a";
+        final String q4 = "This is the random question with all common words - why where how when what which and or of are is were was as a with";
         final String q5 = "True or False? National game of India is Cricket.";
 
         questions = new ArrayList<>(3);
@@ -76,11 +76,27 @@ public class HashMapBasedQuestionKeywordHolderTest {
         }
     }
 
+
+    @Test
+    public void testGetQuestionKeywordsForWordWithPuctuation() throws Exception {
+        final Map<String, HashSet<Integer>> result = testSubject.getQuestionKeywords(questions);
+
+        assertNotNull(result);
+        assertFalse(result.containsKey("cricket."));
+    }
+
+    @Test
+    public void testGetQuestionKeywordsForWordWithoutPuctuation() throws Exception {
+        final Map<String, HashSet<Integer>> result = testSubject.getQuestionKeywords(questions);
+
+        assertNotNull(result);
+        assertTrue(result.containsKey("cricket"));
+    }
+
     @Test
     public void testGetQuestionKeywordsForValidWord() throws Exception {
         final Map<String, HashSet<Integer>> result = testSubject.getQuestionKeywords(questions);
 
-        assertNotNull(result);
         assertTrue(result.containsKey("name"));
     }
 
