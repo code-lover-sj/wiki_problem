@@ -1,7 +1,6 @@
 package sahaj.wiki.sushil.input;
 
-import static sahaj.wiki.sushil.input.constant.InputElementType.*;
-import static sahaj.sushil.utils.Constants.*;
+import static sahaj.wiki.sushil.constant.ElementType.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -16,11 +15,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import sahaj.wiki.sushil.input.constant.InputElementType;
 import sahaj.wiki.sushil.input.constant.InputType;
 import sahaj.wiki.sushil.input.exception.InvalidInputException;
 import sahaj.wiki.sushil.input.factory.InputReaderFactory;
 import sahaj.sushil.utils.SystemConfig;
+import sahaj.wiki.sushil.constant.ElementType;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
 
 public class StringInputReaderTest {
@@ -28,9 +27,9 @@ public class StringInputReaderTest {
 
     private final InputReader inputReader = InputReaderFactory.getInputReader(InputType.STRING);
 
-    Map<InputElementType, ArrayList<String>> parsedInput;
+    Map<ElementType, ArrayList<String>> parsedInput;
 
-    private final SystemConfig sysConfig = new SystemConfig(DEFAULT_SYS_CONFIG_PROPS_FILE);
+    private final SystemConfig sysConfig = new SystemConfig();
 
     private String input;
 

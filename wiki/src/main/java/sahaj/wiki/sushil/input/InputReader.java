@@ -3,8 +3,8 @@ package sahaj.wiki.sushil.input;
 import java.util.ArrayList;
 import java.util.Map;
 
-import sahaj.wiki.sushil.input.constant.InputElementType;
+import sahaj.wiki.sushil.constant.ElementType;
 
 public interface InputReader {
-	Map<InputElementType, ArrayList<String>> readInput(String source);
+	Map<ElementType, ArrayList<String>> readInput(String source);
 }

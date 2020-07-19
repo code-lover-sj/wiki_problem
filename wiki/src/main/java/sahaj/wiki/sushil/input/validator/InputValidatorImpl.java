@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import sahaj.sushil.utils.Constants;
 import sahaj.sushil.utils.SystemConfig;
 import sahaj.wiki.sushil.exception.InternalServerException;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
@@ -20,7 +19,7 @@ import sahaj.wiki.sushil.input.exception.InvalidInputException;
 public class InputValidatorImpl implements InputValidator<String> {
     private static final Logger logger = LogManager.getLogger(InputValidatorImpl.class);
 
-    private final SystemConfig sysConfig = new SystemConfig(Constants.DEFAULT_SYS_CONFIG_PROPS_FILE);
+    private final SystemConfig sysConfig = new SystemConfig();
 
     @Override
     public boolean validate(final String input, List<Exception> errors) {

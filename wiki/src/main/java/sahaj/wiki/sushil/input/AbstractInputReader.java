@@ -9,9 +9,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import sahaj.wiki.sushil.constant.ElementType;
 import sahaj.wiki.sushil.exception.ErrorMessageConsolidator;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
-import sahaj.wiki.sushil.input.constant.InputElementType;
 import sahaj.wiki.sushil.input.validator.InputValidator;
 import sahaj.wiki.sushil.input.validator.InputValidatorImpl;
 
@@ -20,10 +20,10 @@ public abstract class AbstractInputReader implements InputReader {
 
     protected final InputValidator<String> validator = new InputValidatorImpl();
 
-    protected abstract Map<InputElementType, ArrayList<String>> _readInput(String source);
+    protected abstract Map<ElementType, ArrayList<String>> _readInput(String source);
 
     @Override
-    public Map<InputElementType, ArrayList<String>> readInput(final String source) {
+    public Map<ElementType, ArrayList<String>> readInput(final String source) {
         final ArrayList<Exception> errors = new ArrayList<>(ONE);
 
         if (validator.validate(source, errors) && CollectionUtils.isEmpty(errors)) {
