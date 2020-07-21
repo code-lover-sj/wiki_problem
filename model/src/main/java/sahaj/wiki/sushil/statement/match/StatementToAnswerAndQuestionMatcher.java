@@ -2,13 +2,21 @@ package sahaj.wiki.sushil.statement.match;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import sahaj.sushil.utils.Constants;
 
+/**
+ * This class holds the mapping of ids of answers and questions mapped with a statement id. While parsing each
+ * statement, we may get multiple questions and answers pointing to current statement. This class encapsulates that
+ * mapping and allows processor to make decisions based on it.
+ *
+ */
 public final class StatementToAnswerAndQuestionMatcher {
     // May be needed for persistence in case the execution needs to be saved to continue later.
     /*
@@ -16,20 +24,27 @@ public final class StatementToAnswerAndQuestionMatcher {
      */
 
     private final int statementId;
-    private Set<Integer> questionIds;
+    private int questionId;
     private Set<Integer> answerIds;
+    private Map<Integer, Integer> questionIdToCountMap;
 
     public StatementToAnswerAndQuestionMatcher(final int statementId) {
         this.statementId = statementId;
+
+        questionId = Integer.MIN_VALUE;
     }
 
-    public Set<Integer> getQuestionIds() {
-        return CollectionUtils.isEmpty(questionIds) ? Collections.emptySet()
-                : Collections.unmodifiableSet(questionIds);
+    /*public Set<Integer> getQuestionIds() {
+        return CollectionUtils.isEmpty(questionId) ? Collections.emptySet()
+                : Collections.unmodifiableSet(questionId);
+    }*/
+
+    public int getQuestionId() {
+        return questionId;
     }
 
-    public void setQuestionIds(final Set<Integer> questionIds) {
-        this.questionIds = questionIds;
+    public void setQuestionId(final int questionId) {
+        this.questionId = questionId;
     }
 
     public Set<Integer> getAnswerIds() {
@@ -38,6 +53,15 @@ public final class StatementToAnswerAndQuestionMatcher {
 
     public void setAnswerIds(final Set<Integer> answerIds) {
         this.answerIds = answerIds;
+    }
+
+    public Map<Integer, Integer> getQuestionIdToCountMap() {
+        return MapUtils.isEmpty(questionIdToCountMap) ? Collections.emptyMap()
+                : Collections.unmodifiableMap(questionIdToCountMap);
+    }
+
+    public void setQuestionIdToCountMap(final Map<Integer, Integer> questionToCountMap) {
+        this.questionIdToCountMap = questionToCountMap;
     }
 
     public int getStatementId() {
@@ -56,20 +80,20 @@ public final class StatementToAnswerAndQuestionMatcher {
         answerIds.add(answerId);
     }
 
-    public void addQuestion(final int questionId) {
+    /*public void addQuestion(final int questionId) {
         if (CollectionUtils.isEmpty(questionIds)) {
             questionIds = new HashSet<>(Constants.DEFAULT_NO_OF_QUESTIONS);
         }
 
         questionIds.add(questionId);
-    }
+    }*/
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append("StatementToAnswerAndQuestionMatcher [statementId=").append(statementId).append(", ");
-        if (questionIds != null) {
-            builder.append("questionIdToCount=").append(questionIds).append(", ");
+        if (questionId >= Constants.ZERO) {
+            builder.append("questionIds=").append(questionId).append(", ");
         }
         if (answerIds != null) {
             builder.append("answerIds=").append(answerIds);
@@ -80,7 +104,7 @@ public final class StatementToAnswerAndQuestionMatcher {
 
     @Override
     public int hashCode() {
-        return Objects.hash(answerIds, questionIds, statementId);
+        return Objects.hash(answerIds, questionId, questionIdToCountMap, statementId);
     }
 
     @Override
@@ -92,7 +116,7 @@ public final class StatementToAnswerAndQuestionMatcher {
             return false;
         }
         final StatementToAnswerAndQuestionMatcher other = (StatementToAnswerAndQuestionMatcher) obj;
-        return Objects.equals(answerIds, other.answerIds) && Objects.equals(questionIds, other.questionIds)
-                && statementId == other.statementId;
+        return Objects.equals(answerIds, other.answerIds) && questionId == other.questionId
+                && Objects.equals(questionIdToCountMap, other.questionIdToCountMap) && statementId == other.statementId;
     }
 }

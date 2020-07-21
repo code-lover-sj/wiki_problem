@@ -1,18 +1,21 @@
 package sahaj.wiki.sushil.input;
 
-import static sahaj.sushil.utils.Constants.*;
-import static sahaj.wiki.sushil.constant.ElementType.*;
+import static sahaj.sushil.utils.Constants.ZERO;
+import static sahaj.wiki.sushil.constant.ElementType.ANSWER;
+import static sahaj.wiki.sushil.constant.ElementType.QUESTION;
+import static sahaj.wiki.sushil.constant.ElementType.STATEMENT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import sahaj.sushil.utils.Builder;
 import sahaj.sushil.utils.SystemConfig;
 import sahaj.wiki.sushil.constant.ElementType;
 import sahaj.wiki.sushil.exception.InternalServerException;
@@ -20,17 +23,19 @@ import sahaj.wiki.sushil.input.exception.InvalidInputException;
 import sahaj.wiki.sushil.parser.GeneralParser;
 import sahaj.wiki.sushil.parser.Parser;
 
+/**
+ * This class will parse the given String input. It will parse all the statements into as separate {@link String} from
+ * the single line paragraph. It will also parse the answers into an individual {@link String} instead of being in a
+ * single {@link String} separated by delimiter.
+ */
 public class StringInputReader extends AbstractInputReader {
     private static final Logger logger = LogManager.getLogger(StringInputReader.class);
 
     private final Parser parser = new GeneralParser();
     private final SystemConfig sysConfig = new SystemConfig();
 
-    private StringInputReader(final StringInputReaderBuilder builder) {
-    }
-
     private void getParsedStatements(final String[] parsedInput,
-            final Map<ElementType, ArrayList<String>> parsedInputMap) {
+            final Map<ElementType, List<String>> parsedInputMap) {
         final String[] statements = parser.parse(parsedInput[ZERO], sysConfig.getStatementDelimiter());
 
         if (ArrayUtils.isEmpty(statements)) {
@@ -39,20 +44,17 @@ public class StringInputReader extends AbstractInputReader {
             throw new InternalServerException(stmtParseErr);
         }
 
-        final ArrayList<String> stmtList = new ArrayList<>(Arrays.asList(statements));
+        List<String> stmtList = new ArrayList<>(Arrays.asList(statements));
+        stmtList = stmtList.stream().map(String::trim).collect(Collectors.toList());
         logger.info("Got the statements {}", stmtList);
 
         parsedInputMap.put(STATEMENT, stmtList);
     }
 
     private void getParsedQuestions(final String[] parsedInput,
-            final Map<ElementType, ArrayList<String>> parsedInputMap, final int noOfStmts,
+            final Map<ElementType, List<String>> parsedInputMap, final int noOfStmts,
             final int noOfQuestions) {
         final ArrayList<String> questions = new ArrayList<>(noOfQuestions);
-
-        /*
-         * for (int cnt = noOfStmts; cnt < noOfStmts + noOfQuestions; cnt++) { questions.add(parsedInput[cnt]); }
-         */
 
         questions.addAll(Arrays.asList(Arrays.copyOfRange(parsedInput, noOfStmts, noOfStmts + noOfQuestions)));
 
@@ -60,7 +62,7 @@ public class StringInputReader extends AbstractInputReader {
     }
 
     private void getParsedAnswers(final String[] parsedInput,
-            final Map<ElementType, ArrayList<String>> parsedInputMap, final int noOfStmts,
+            final Map<ElementType, List<String>> parsedInputMap, final int noOfStmts,
             final int noOfQuestions) {
         final String answerStrings = parsedInput[noOfStmts + noOfQuestions];
         final String[] answers = answerStrings.split(sysConfig.getAnswerDelimiter());
@@ -68,8 +70,8 @@ public class StringInputReader extends AbstractInputReader {
             throw new InvalidInputException("Number of answers must be same as number of questions.");
         }
 
-        final ArrayList<String> answerList = new ArrayList<>(Arrays.asList(answers));
-
+        List<String> answerList = new ArrayList<>(Arrays.asList(answers));
+        answerList = answerList.stream().map(String::trim).collect(Collectors.toList());
         parsedInputMap.put(ANSWER, answerList);
     }
 
@@ -81,15 +83,15 @@ public class StringInputReader extends AbstractInputReader {
     }
 
     @Override
-    public Map<ElementType, ArrayList<String>> _readInput(final String source) {
+    public Map<ElementType, List<String>> _readInput(final String source) {
         logger.info("Parsing the input - {}", source);
 
         final String[] parsedInput = getParsedInput(source);
 
-        final Map<ElementType, ArrayList<String>> parsedInputMap = new EnumMap<>(ElementType.class);
+        final Map<ElementType, List<String>> parsedInputMap = new EnumMap<>(ElementType.class);
 
-        final int noOfStmts = Integer.parseInt(sysConfig.getNoOfStatementsInPara());
-        final int noOfQuestions = Integer.parseInt(sysConfig.getNoOfQuestions());
+        final int noOfStmts = sysConfig.getIntNoOfStatementsInPara();
+        final int noOfQuestions = sysConfig.getIntNoOfQuestions();
 
         getParsedStatements(parsedInput, parsedInputMap);
 
@@ -98,12 +100,5 @@ public class StringInputReader extends AbstractInputReader {
         getParsedAnswers(parsedInput, parsedInputMap, noOfStmts, noOfQuestions);
 
         return parsedInputMap;
-    }
-
-    public static class StringInputReaderBuilder implements Builder<StringInputReader> {
-        @Override
-        public StringInputReader build() {
-            return new StringInputReader(this);
-        }
     }
 }

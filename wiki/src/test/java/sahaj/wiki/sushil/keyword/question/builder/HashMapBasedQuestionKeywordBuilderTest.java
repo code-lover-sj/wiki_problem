@@ -1,4 +1,4 @@
-package sahaj.wiki.sushil.keyword.question.holder;
+package sahaj.wiki.sushil.keyword.question.builder;
 
 
 import static org.junit.Assert.assertFalse;
@@ -19,9 +19,10 @@ import org.junit.Test;
 
 import sahaj.sushil.utils.Constants;
 import sahaj.wiki.sushil.keyword.exception.InvalidQuestionException;
+import sahaj.wiki.sushil.keyword.question.builder.HashMapBasedQuestionKeywordBuilder;
 
-public class HashMapBasedQuestionKeywordHolderTest {
-    private HashMapBasedQuestionKeywordHolder testSubject;
+public class HashMapBasedQuestionKeywordBuilderTest {
+    private HashMapBasedQuestionKeywordBuilder testSubject;
     private List<String> questions;
 
     @Before
@@ -49,8 +50,8 @@ public class HashMapBasedQuestionKeywordHolderTest {
         questions = null;
     }
 
-    private HashMapBasedQuestionKeywordHolder createTestSubject() {
-        return new HashMapBasedQuestionKeywordHolder();
+    private HashMapBasedQuestionKeywordBuilder createTestSubject() {
+        return new HashMapBasedQuestionKeywordBuilder();
     }
 
 

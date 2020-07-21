@@ -74,9 +74,9 @@ public class TrieNode<T> {
         if (ids != null) {
             builder.append("ids=").append(ids).append(", ");
         }
-        if (!children.isEmpty()) {
-            builder.append("children=").append(children);
-        }
+        /*
+         * if (!children.isEmpty()) { builder.append("children=").append(children); }
+         */
         builder.append("]");
         return builder.toString();
     }

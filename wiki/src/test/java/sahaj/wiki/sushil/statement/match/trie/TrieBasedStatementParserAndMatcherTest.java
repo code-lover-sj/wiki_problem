@@ -3,6 +3,7 @@ package sahaj.wiki.sushil.statement.match.trie;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +19,8 @@ import org.junit.rules.ExpectedException;
 
 import sahaj.sushil.utils.Constants;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
+import sahaj.wiki.sushil.keyword.answer.builder.TrieBasedAnswerKeywordBuilder;
+import sahaj.wiki.sushil.keyword.question.builder.HashMapBasedQuestionKeywordBuilder;
 import sahaj.wiki.sushil.keyword.trie.Trie;
 import sahaj.wiki.sushil.statement.match.StatementToAnswerAndQuestionMatcher;
 import sahaj.wiki.sushil.utils.TestHelper;
@@ -57,8 +61,8 @@ public class TrieBasedStatementParserAndMatcherTest {
         assertEquals(Constants.ONE, result.getAnswerIds().size());
         assertTrue(result.getAnswerIds().contains(Constants.ZERO));
 
-        assertEquals(Constants.ONE, result.getQuestionIds().size());
-        assertTrue(result.getQuestionIds().contains(2));
+        assertEquals(Constants.ONE, result.getQuestionIdToCountMap().size());
+        assertTrue(result.getQuestionIdToCountMap().containsKey(2));
     }
 
     @Test
@@ -69,7 +73,7 @@ public class TrieBasedStatementParserAndMatcherTest {
 
         assertNotNull(result);
         assertTrue(CollectionUtils.isEmpty(result.getAnswerIds()));
-        assertTrue(CollectionUtils.isEmpty(result.getQuestionIds()));
+        assertTrue(MapUtils.isEmpty(result.getQuestionIdToCountMap()));
     }
 
     @Test
@@ -81,8 +85,8 @@ public class TrieBasedStatementParserAndMatcherTest {
         assertNotNull(result);
         assertTrue(CollectionUtils.isEmpty(result.getAnswerIds()));
 
-        assertNotNull(result.getQuestionIds());
-        assertEquals(1, result.getQuestionIds().size());
+        assertNotNull(result.getQuestionIdToCountMap());
+        assertEquals(1, result.getQuestionIdToCountMap().size());
     }
 
     @Test
@@ -95,7 +99,7 @@ public class TrieBasedStatementParserAndMatcherTest {
         assertNotNull(result.getAnswerIds());
         assertTrue(result.getAnswerIds().contains(2));
 
-        assertTrue(CollectionUtils.isEmpty(result.getQuestionIds()));
+        assertTrue(MapUtils.isEmpty(result.getQuestionIdToCountMap()));
     }
 
     @Test
@@ -117,9 +121,29 @@ public class TrieBasedStatementParserAndMatcherTest {
         assertNotNull(result);
         assertTrue(CollectionUtils.isEmpty(result.getAnswerIds()));
 
-        final Set<Integer> questionIds = result.getQuestionIds();
+        final Set<Integer> questionIds = result.getQuestionIdToCountMap().keySet();
+        // final Set<Integer> questionIds = result.getQuestionIds();
         assertNotNull(questionIds);
         assertTrue(2 == questionIds.size());
         assertTrue(questionIds.containsAll(Stream.of(Constants.ZERO, Constants.ONE).collect(Collectors.toSet())));
+    }
+
+    @Test
+    public void testSelective() {
+        final String stmt = "The plains zebra and the mountain zebra belong to the subgenus Hippotigris, but Grévy's zebra is the sole species of subgenus Dolichohippus.";
+
+        final String q1 = "Which Zebras are endangered?";
+        final String q2 = "Which are the three species of zebras?";
+        final String q3 = "Which subgenus do the plains zebra and the mountain zebra belong to?";
+
+
+        final Map<String, HashSet<Integer>> queKeys = new HashMapBasedQuestionKeywordBuilder().buildKeywords(Arrays.asList(q1, q2, q3));
+
+        final String a1 = "subgenus Hippotigris";
+        final Trie<String> ansKeys = new TrieBasedAnswerKeywordBuilder().buildKeywords(Arrays.asList(a1));
+
+        final StatementToAnswerAndQuestionMatcher result = testSubject.parseAndMatchStatementWithAnswerAndQuestion(stmt,
+                0, ansKeys, queKeys);
+        assertTrue(result.getAnswerIds().contains(Constants.ZERO));
     }
 }

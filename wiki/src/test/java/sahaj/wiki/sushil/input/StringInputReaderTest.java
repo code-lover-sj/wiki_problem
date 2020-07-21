@@ -3,7 +3,7 @@ package sahaj.wiki.sushil.input;
 import static sahaj.wiki.sushil.constant.ElementType.*;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
@@ -27,7 +27,7 @@ public class StringInputReaderTest {
 
     private final InputReader inputReader = InputReaderFactory.getInputReader(InputType.STRING);
 
-    Map<ElementType, ArrayList<String>> parsedInput;
+    Map<ElementType, List<String>> parsedInput;
 
     private final SystemConfig sysConfig = new SystemConfig();
 
@@ -85,18 +85,18 @@ public class StringInputReaderTest {
 
     @Test
     public void testParsedStatementsFromInput() {
-        final ArrayList<String> stmts = parsedInput.get(STATEMENT);
+        final List<String> stmts = parsedInput.get(STATEMENT);
         assertNotNull(stmts);
         assertTrue(3 == stmts.size());
     }
 
     @Test
     public void testParsedQuestions() {
-        final ArrayList<String> questions = parsedInput.get(QUESTION);
+        final List<String> questions = parsedInput.get(QUESTION);
         assertNotNull(questions);
         logger.info("Questions size = {}. Questions = {}", questions.size(), questions);
 
-        assertTrue(Integer.parseInt(sysConfig.getNoOfQuestions()) == questions.size());
+        assertTrue(sysConfig.getIntNoOfQuestions() == questions.size());
     }
 
     @Test
@@ -111,8 +111,8 @@ public class StringInputReaderTest {
 
     @Test
     public void testParsedAnswers() {
-        final ArrayList<String> answers = parsedInput.get(ANSWER);
+        final List<String> answers = parsedInput.get(ANSWER);
         assertNotNull(answers);
-        assertTrue(Integer.parseInt(sysConfig.getNoOfQuestions()) == answers.size());
+        assertTrue(sysConfig.getIntNoOfQuestions() == answers.size());
     }
 }

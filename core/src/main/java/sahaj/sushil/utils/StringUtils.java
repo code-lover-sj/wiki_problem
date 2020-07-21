@@ -2,20 +2,26 @@ package sahaj.sushil.utils;
 
 public class StringUtils {
     public static String chopPunctuation(String term) {
-        final char lastChar = term.charAt(term.length() - 1);
-        if (!Character.isAlphabetic(lastChar) && !Character.isDigit(lastChar)) {
+        char lastChar = term.charAt(term.length() - 1);
+        while (!Character.isAlphabetic(lastChar) && !Character.isDigit(lastChar)) {
             term = org.apache.commons.lang3.StringUtils.chop(term);
+
+            if (org.apache.commons.lang3.StringUtils.isBlank(term)) {
+                return term;
+            }
+
+            lastChar = term.charAt(term.length() - 1);
         }
 
         return term;
     }
 
     public static String toLowerCaseWithChoppedPunctuation(String term) {
-        term = term.toLowerCase();
-        return chopPunctuation(term);
-    }
+        if (org.apache.commons.lang3.StringUtils.isBlank(term)) {
+            return term;
+        }
 
-    public static void main(final String[] args) {
-        toLowerCaseWithChoppedPunctuation("1");
+        term = term.toLowerCase().trim().intern();
+        return chopPunctuation(term);
     }
 }

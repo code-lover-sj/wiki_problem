@@ -12,6 +12,7 @@ public class Constants {
 
     public static final int ONE = 1;
     public static final int ZERO = 0;
+    public static final int HUNDRED = 100;
 
     public static final int DEFAULT_NO_OF_QUESTIONS = 5;
     public static final int DEFAULT_NO_STATEMENTS_IN_PARA = ONE;
@@ -31,13 +32,18 @@ public class Constants {
     public static final String QUESTION_DELIMITER = "question_delimiter";
     public static final String STATEMENT_DELIMITER = "statement_delimiter";
 
-    public static final Set<String> COMMON_WORDS = Stream.of("the", "why", "where", "how", "when", "what", "which",
-            "and", "or", "of", "are", "is", "were", "was", "as", "a", "with", "to", "in", "it")
-            .collect(Collectors.toSet());
+    public static final String QUESTION_COLLISION_RESOLVER_STRATEGY = "question_collision_resolver_strategy";
+
 
     public static final String DEF_ANSWER_DELIMITER = ";";
     public static final String DEF_QUE_DELIMITER = NEW_LINE;
-    public static final String DEF_STMT_DELIMITER = "[.?!]+";
+    public static final String DEF_STMT_DELIMITER = "[.?!]+$";
+    public static final String DEF_QUE_COLLISION_STRATEGY = "RANDOM";
 
     public static final String LEAF_TRIE_NODE = "leaf_";
+
+    public static final Set<String> COMMON_WORDS = Stream.of("the", "why", "where", "how", "when", "what", "which",
+            "and", "or", "of", "are", "is", "were", "was", "as", "a", "with", "to", "in", "it", "who")
+            .collect(Collectors.toSet());
+    public static final String UNSUPPORTED_OPERATION = "Only RANDOM strategy is supported as of now";
 }

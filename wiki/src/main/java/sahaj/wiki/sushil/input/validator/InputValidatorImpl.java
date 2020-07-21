@@ -43,9 +43,9 @@ public class InputValidatorImpl implements InputValidator<String> {
             throw new InternalServerException("Some error occurred while parsing input");
         }
 
-        final int noOfQuestions = Integer.parseInt(sysConfig.getNoOfQuestions());
-        final int noOfStatements = Integer.parseInt(sysConfig.getNoOfStatementsInPara());
-        final int noOfAnswers = Integer.parseInt(sysConfig.getNoOfAnswers());
+        final int noOfQuestions = sysConfig.getIntNoOfQuestions();
+        final int noOfStatements = sysConfig.getIntNoOfStatementsInPara();
+        final int noOfAnswers = sysConfig.getIntNoOfAnswers();
 
         final int totalStrings = noOfAnswers + noOfStatements + noOfQuestions;
 

@@ -1,4 +1,4 @@
-package sahaj.wiki.sushil.keyword.answer.holder;
+package sahaj.wiki.sushil.keyword.answer.builder;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import sahaj.sushil.utils.Constants;
+import sahaj.wiki.sushil.keyword.answer.builder.TrieBasedAnswerKeywordBuilder;
 import sahaj.wiki.sushil.keyword.trie.Trie;
 import sahaj.wiki.sushil.keyword.trie.TrieNode;
 

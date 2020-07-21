@@ -1,4 +1,4 @@
-package sahaj.wiki.sushil.keyword.question.holder;
+package sahaj.wiki.sushil.keyword.question.builder;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,8 +17,11 @@ import sahaj.wiki.sushil.keyword.exception.InvalidQuestionException;
 import sahaj.wiki.sushil.parser.GeneralParser;
 import sahaj.wiki.sushil.parser.Parser;
 
-public class HashMapBasedQuestionKeywordHolder implements KeywordsBuilder<Map<String, HashSet<Integer>>> {
-    private static final Logger logger = LogManager.getLogger(HashMapBasedQuestionKeywordHolder.class);
+/**
+ * This class simply matches each keyword with the question ids it appears in.
+ */
+public class HashMapBasedQuestionKeywordBuilder implements KeywordsBuilder<Map<String, HashSet<Integer>>> {
+    private static final Logger logger = LogManager.getLogger(HashMapBasedQuestionKeywordBuilder.class);
 
     @Override
     public Map<String, HashSet<Integer>> buildKeywords(final List<String> questions) {
@@ -59,11 +62,16 @@ public class HashMapBasedQuestionKeywordHolder implements KeywordsBuilder<Map<St
 
         final String[] parsedQuestion = parser.parse(question, Constants.SPACE);
 
+        populateMapData(questionNo, questionKeywords, parsedQuestion);
+    }
+
+    private void populateMapData(final int questionNo, final Map<String, HashSet<Integer>> questionKeywords,
+            final String[] parsedQuestion) {
         for (String keyword : parsedQuestion) {
             keyword = sahaj.sushil.utils.StringUtils.toLowerCaseWithChoppedPunctuation(keyword);
 
-            if (Constants.COMMON_WORDS.contains(keyword)) {
-                logger.debug("Omitting common word {} in question no {}.", keyword, questionNo);
+            if (StringUtils.isBlank(keyword) || Constants.COMMON_WORDS.contains(keyword)) {
+                logger.debug("Omitting blank or common word {} in question no {}.", keyword, questionNo);
                 continue;
             }
 
