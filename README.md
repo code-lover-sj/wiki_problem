@@ -34,6 +34,7 @@ Approach taken - Option 2.
 	Decided against the inverted index thinking Option 2 will be more space efficient.
 
 Starting point - Solution.java
+
 Test class to be used - SolutionTest.java
 
 
