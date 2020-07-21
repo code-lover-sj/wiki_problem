@@ -6,10 +6,22 @@ import org.apache.logging.log4j.Logger;
 
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
 
+/**
+ * This class will build a trie for given data. Starting will root which has null data, subsequent children can be
+ * added. This class consists of {@link TrieNode} nodes which hold data and children to construct tree of its own down
+ * below.
+ *
+ * @param <T>
+ *            Type of the trie to be constructed.
+ */
 public class Trie<T> {
     private static final Logger logger = LogManager.getLogger(Trie.class);
 
     private final TrieNode<T> root = new TrieNode<>(null);
+
+    public boolean isEmpty() {
+        return root.children.isEmpty();
+    }
 
     public TrieNode<T> addUnderRoot(final T newItem) {
         return add(root, newItem);
@@ -73,7 +85,6 @@ public class Trie<T> {
     }
 
     public TrieNode<T> find(final TrieNode<T> node, final T item) {
-        // TrieNode<T> found = null;
         if (null == node) {
             throw new InvalidArgumentException(
                     "Non null node is expected to be passed to search under it. If you wished to search under root, use the method findUnderRoot instead.");
@@ -85,12 +96,5 @@ public class Trie<T> {
         }
 
         return null;
-
-        /*
-         * for (final TrieNode<T> child : node.children.values()) { found = find(child, item, ++attempt); if (null !=
-         * found) { return found; } }
-         *
-         * return found;
-         */
     }
 }

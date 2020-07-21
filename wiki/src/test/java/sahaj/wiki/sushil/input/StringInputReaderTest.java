@@ -1,10 +1,9 @@
 package sahaj.wiki.sushil.input;
 
-import static sahaj.wiki.sushil.input.constant.InputElementType.*;
-import static sahaj.sushil.utils.Constants.*;
+import static sahaj.wiki.sushil.constant.ElementType.*;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
@@ -16,11 +15,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import sahaj.wiki.sushil.input.constant.InputElementType;
 import sahaj.wiki.sushil.input.constant.InputType;
 import sahaj.wiki.sushil.input.exception.InvalidInputException;
 import sahaj.wiki.sushil.input.factory.InputReaderFactory;
 import sahaj.sushil.utils.SystemConfig;
+import sahaj.wiki.sushil.constant.ElementType;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
 
 public class StringInputReaderTest {
@@ -28,9 +27,9 @@ public class StringInputReaderTest {
 
     private final InputReader inputReader = InputReaderFactory.getInputReader(InputType.STRING);
 
-    Map<InputElementType, ArrayList<String>> parsedInput;
+    Map<ElementType, List<String>> parsedInput;
 
-    private final SystemConfig sysConfig = new SystemConfig(DEFAULT_SYS_CONFIG_PROPS_FILE);
+    private final SystemConfig sysConfig = new SystemConfig();
 
     private String input;
 
@@ -86,25 +85,25 @@ public class StringInputReaderTest {
 
     @Test
     public void testParsedStatementsFromInput() {
-        final ArrayList<String> stmts = parsedInput.get(STATEMENT);
+        final List<String> stmts = parsedInput.get(STATEMENT);
         assertNotNull(stmts);
         assertTrue(3 == stmts.size());
     }
 
     @Test
     public void testParsedQuestions() {
-        final ArrayList<String> questions = parsedInput.get(QUESTION);
+        final List<String> questions = parsedInput.get(QUESTION);
         assertNotNull(questions);
         logger.info("Questions size = {}. Questions = {}", questions.size(), questions);
 
-        assertTrue(Integer.parseInt(sysConfig.getNoOfQuestions()) == questions.size());
+        assertTrue(sysConfig.getIntNoOfQuestions() == questions.size());
     }
 
     @Test
     public void testLesserAnswersThanQuestions() {
         final String lastAnsRemoved = input.replaceAll("; 4", "");
 
-        expectedException.expect(InvalidInputException.class);
+        expectedException.expect(InvalidArgumentException.class);
         expectedException.expectMessage("Number of answers must be same as number of questions.");
 
         inputReader.readInput(lastAnsRemoved);
@@ -112,8 +111,8 @@ public class StringInputReaderTest {
 
     @Test
     public void testParsedAnswers() {
-        final ArrayList<String> answers = parsedInput.get(ANSWER);
+        final List<String> answers = parsedInput.get(ANSWER);
         assertNotNull(answers);
-        assertTrue(Integer.parseInt(sysConfig.getNoOfQuestions()) == answers.size());
+        assertTrue(sysConfig.getIntNoOfQuestions() == answers.size());
     }
 }
