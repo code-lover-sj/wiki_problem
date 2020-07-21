@@ -24,8 +24,6 @@ public class SystemConfigPropertiesLoader {
         }
 
         this.fileName = fileName;
-
-        // loadPropertiesFromFile(fileName);
     }
 
 

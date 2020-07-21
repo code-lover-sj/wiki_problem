@@ -12,7 +12,7 @@ import sahaj.wiki.sushil.exception.InvalidArgumentException;
  * below.
  *
  * @param <T>
- *            Type of which trie to be constructed.
+ *            Type of the trie to be constructed.
  */
 public class Trie<T> {
     private static final Logger logger = LogManager.getLogger(Trie.class);

@@ -74,6 +74,7 @@ public class TrieNode<T> {
         if (ids != null) {
             builder.append("ids=").append(ids).append(", ");
         }
+        // Uncomment in case want to see the actual trie.
         /*
          * if (!children.isEmpty()) { builder.append("children=").append(children); }
          */

@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Constants {
+    private Constants() {
+    }
+
     public static final String DEF_LINE_SEPARATOR = "\n";
     public static final String LINE_SEPARATOR = "line.separator";
     public static final String QUESTION_MARK = "?";

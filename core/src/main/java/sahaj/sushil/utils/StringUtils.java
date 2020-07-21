@@ -1,6 +1,9 @@
 package sahaj.sushil.utils;
 
 public class StringUtils {
+    private StringUtils() {
+    }
+
     public static String chopPunctuation(String term) {
         char lastChar = term.charAt(term.length() - 1);
         while (!Character.isAlphabetic(lastChar) && !Character.isDigit(lastChar)) {

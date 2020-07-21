@@ -103,7 +103,7 @@ public class StringInputReaderTest {
     public void testLesserAnswersThanQuestions() {
         final String lastAnsRemoved = input.replaceAll("; 4", "");
 
-        expectedException.expect(InvalidInputException.class);
+        expectedException.expect(InvalidArgumentException.class);
         expectedException.expectMessage("Number of answers must be same as number of questions.");
 
         inputReader.readInput(lastAnsRemoved);

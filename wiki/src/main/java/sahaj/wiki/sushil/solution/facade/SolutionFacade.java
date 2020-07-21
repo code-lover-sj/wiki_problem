@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import sahaj.wiki.sushil.constant.ElementType;
 import sahaj.wiki.sushil.input.InputReader;
 import sahaj.wiki.sushil.input.constant.InputType;
@@ -16,7 +19,11 @@ import sahaj.wiki.sushil.statement.match.trie.StatementProcessor;
 import sahaj.wiki.sushil.statement.match.trie.StatementProcessor.StatementProcessorBuilder;
 
 public class SolutionFacade {
+    private static final Logger logger = LogManager.getLogger(SolutionFacade.class);
+
     public List<String> getCorrectSequnetialAnswers(final String source) {
+        logger.info("Received request with input {}", source);
+
         final InputReader inputReader = InputReaderFactory.getInputReader(InputType.STRING);
         final Map<ElementType, List<String>> parsedInput = inputReader.readInput(source);
 
@@ -33,6 +40,9 @@ public class SolutionFacade {
         final StatementProcessor processor = processorBuilder.input(parsedInput).answerKeywords(answerKeywords)
                 .questionKeywords(questionKeywords).build();
 
-        return processor.processAndGetCorrectAnswerIds();
+        final List<String> answerIds = processor.processAndGetCorrectAnswerIds();
+        logger.info("Output answer ids = {}", answerIds);
+
+        return answerIds;
     }
 }

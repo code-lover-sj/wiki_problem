@@ -34,56 +34,8 @@ public class StringInputReader extends AbstractInputReader {
     private final Parser parser = new GeneralParser();
     private final SystemConfig sysConfig = new SystemConfig();
 
-    private void getParsedStatements(final String[] parsedInput,
-            final Map<ElementType, List<String>> parsedInputMap) {
-        final String[] statements = parser.parse(parsedInput[ZERO], sysConfig.getStatementDelimiter());
-
-        if (ArrayUtils.isEmpty(statements)) {
-            final String stmtParseErr = "No statements could be parsed in the paragraph.";
-            logger.error(stmtParseErr);
-            throw new InternalServerException(stmtParseErr);
-        }
-
-        List<String> stmtList = new ArrayList<>(Arrays.asList(statements));
-        stmtList = stmtList.stream().map(String::trim).collect(Collectors.toList());
-        logger.info("Got the statements {}", stmtList);
-
-        parsedInputMap.put(STATEMENT, stmtList);
-    }
-
-    private void getParsedQuestions(final String[] parsedInput,
-            final Map<ElementType, List<String>> parsedInputMap, final int noOfStmts,
-            final int noOfQuestions) {
-        final ArrayList<String> questions = new ArrayList<>(noOfQuestions);
-
-        questions.addAll(Arrays.asList(Arrays.copyOfRange(parsedInput, noOfStmts, noOfStmts + noOfQuestions)));
-
-        parsedInputMap.put(QUESTION, questions);
-    }
-
-    private void getParsedAnswers(final String[] parsedInput,
-            final Map<ElementType, List<String>> parsedInputMap, final int noOfStmts,
-            final int noOfQuestions) {
-        final String answerStrings = parsedInput[noOfStmts + noOfQuestions];
-        final String[] answers = answerStrings.split(sysConfig.getAnswerDelimiter());
-        if (answers.length != noOfQuestions) {
-            throw new InvalidInputException("Number of answers must be same as number of questions.");
-        }
-
-        List<String> answerList = new ArrayList<>(Arrays.asList(answers));
-        answerList = answerList.stream().map(String::trim).collect(Collectors.toList());
-        parsedInputMap.put(ANSWER, answerList);
-    }
-
-    private String[] getParsedInput(final String source) {
-        final String[] parsedInput = parser.parse(source, null);
-
-        validator.validateParsedInput(parsedInput);
-        return parsedInput;
-    }
-
     @Override
-    public Map<ElementType, List<String>> _readInput(final String source) {
+    public Map<ElementType, List<String>> _readInput(final String source, final List<Exception> errors) {
         logger.info("Parsing the input - {}", source);
 
         final String[] parsedInput = getParsedInput(source);
@@ -93,12 +45,66 @@ public class StringInputReader extends AbstractInputReader {
         final int noOfStmts = sysConfig.getIntNoOfStatementsInPara();
         final int noOfQuestions = sysConfig.getIntNoOfQuestions();
 
-        getParsedStatements(parsedInput, parsedInputMap);
+        getParsedStatements(parsedInput, parsedInputMap, errors);
 
         getParsedQuestions(parsedInput, parsedInputMap, noOfStmts, noOfQuestions);
 
-        getParsedAnswers(parsedInput, parsedInputMap, noOfStmts, noOfQuestions);
+        getParsedAnswers(parsedInput, parsedInputMap, noOfStmts, noOfQuestions, errors);
 
         return parsedInputMap;
+    }
+
+    private void getParsedStatements(final String[] parsedInput, final Map<ElementType, List<String>> parsedInputMap,
+            final List<Exception> errors) {
+        try {
+            final String[] statements = parser.parse(parsedInput[ZERO], sysConfig.getStatementDelimiter());
+
+            if (ArrayUtils.isEmpty(statements)) {
+                final String stmtParseErr = "No statements could be parsed in the paragraph.";
+                logger.error(stmtParseErr);
+                throw new InternalServerException(stmtParseErr);
+            }
+
+            List<String> stmtList = new ArrayList<>(Arrays.asList(statements));
+            stmtList = stmtList.stream().map(String::trim).collect(Collectors.toList());
+            logger.info("Got the statements {}", stmtList);
+
+            parsedInputMap.put(STATEMENT, stmtList);
+        } catch (final Exception e) {
+            errors.add(e);
+        }
+    }
+
+    private void getParsedQuestions(final String[] parsedInput, final Map<ElementType, List<String>> parsedInputMap,
+            final int noOfStmts, final int noOfQuestions) {
+        final ArrayList<String> questions = new ArrayList<>(noOfQuestions);
+
+        questions.addAll(Arrays.asList(Arrays.copyOfRange(parsedInput, noOfStmts, noOfStmts + noOfQuestions)));
+
+        parsedInputMap.put(QUESTION, questions);
+    }
+
+    private void getParsedAnswers(final String[] parsedInput, final Map<ElementType, List<String>> parsedInputMap,
+            final int noOfStmts, final int noOfQuestions, final List<Exception> errors) {
+        try {
+            final String answerStrings = parsedInput[noOfStmts + noOfQuestions];
+            final String[] answers = answerStrings.split(sysConfig.getAnswerDelimiter());
+            if (answers.length != noOfQuestions) {
+                throw new InvalidInputException("Number of answers must be same as number of questions.");
+            }
+
+            List<String> answerList = new ArrayList<>(Arrays.asList(answers));
+            answerList = answerList.stream().map(String::trim).collect(Collectors.toList());
+            parsedInputMap.put(ANSWER, answerList);
+        } catch (final Exception e) {
+            errors.add(e);
+        }
+    }
+
+    private String[] getParsedInput(final String source) {
+        final String[] parsedInput = parser.parse(source, null);
+
+        validator.validateParsedInput(parsedInput);
+        return parsedInput;
     }
 }

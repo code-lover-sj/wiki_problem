@@ -12,10 +12,9 @@ import org.apache.commons.collections4.MapUtils;
 import sahaj.sushil.utils.Constants;
 
 /**
- * This class holds the mapping of ids of answers and questions mapped with a statement id. While parsing each
- * statement, we may get multiple questions and answers pointing to current statement. This class encapsulates that
- * mapping and allows processor to make decisions based on it.
- *
+ * This class holds the mapping of ids of answers and question mapped with a statement id. While parsing each statement,
+ * we may get multiple questions and answers pointing to current statement. This class encapsulates that mapping and
+ * allows processor to make decisions based on it.
  */
 public final class StatementToAnswerAndQuestionMatcher {
     // May be needed for persistence in case the execution needs to be saved to continue later.
@@ -33,11 +32,6 @@ public final class StatementToAnswerAndQuestionMatcher {
 
         questionId = Integer.MIN_VALUE;
     }
-
-    /*public Set<Integer> getQuestionIds() {
-        return CollectionUtils.isEmpty(questionId) ? Collections.emptySet()
-                : Collections.unmodifiableSet(questionId);
-    }*/
 
     public int getQuestionId() {
         return questionId;
@@ -80,23 +74,16 @@ public final class StatementToAnswerAndQuestionMatcher {
         answerIds.add(answerId);
     }
 
-    /*public void addQuestion(final int questionId) {
-        if (CollectionUtils.isEmpty(questionIds)) {
-            questionIds = new HashSet<>(Constants.DEFAULT_NO_OF_QUESTIONS);
-        }
-
-        questionIds.add(questionId);
-    }*/
-
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("StatementToAnswerAndQuestionMatcher [statementId=").append(statementId).append(", ");
-        if (questionId >= Constants.ZERO) {
-            builder.append("questionIds=").append(questionId).append(", ");
-        }
+        builder.append("StatementToAnswerAndQuestionMatcher [statementId=").append(statementId).append(", questionId=")
+        .append(questionId).append(", ");
         if (answerIds != null) {
-            builder.append("answerIds=").append(answerIds);
+            builder.append("answerIds=").append(answerIds).append(", ");
+        }
+        if (questionIdToCountMap != null) {
+            builder.append("questionIdToCountMap=").append(questionIdToCountMap);
         }
         builder.append("]");
         return builder.toString();

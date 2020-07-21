@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import sahaj.sushil.utils.Constants;
-import sahaj.sushil.utils.SystemConfig;
 import sahaj.wiki.sushil.exception.InvalidArgumentException;
 import sahaj.wiki.sushil.keyword.trie.Trie;
 import sahaj.wiki.sushil.keyword.trie.TrieNode;
@@ -26,8 +25,6 @@ import sahaj.wiki.sushil.statement.match.StatementToAnswerAndQuestionMatcher;
  */
 public class TrieBasedStatementParserAndMatcher {
     private static final Logger logger = LogManager.getLogger(TrieBasedStatementParserAndMatcher.class);
-
-    private final SystemConfig sysConfig = new SystemConfig();
 
     public StatementToAnswerAndQuestionMatcher parseAndMatchStatementWithAnswerAndQuestion(final String stmt,
             final int stmtId, final Trie<String> answerKeywords, final Map<String, HashSet<Integer>> questionKeywords) {
@@ -69,41 +66,8 @@ public class TrieBasedStatementParserAndMatcher {
 
         stmtMatcher.setQuestionIdToCountMap(questionToCountMap);
 
-        // setQuestionIds(questionToCountMap, stmtMatcher);
-
         return stmtMatcher;
     }
-
-    /**
-     * THIS METHOD IS WRONG. THERE CAN ALWAYS BE MANY QUESTIONS MAPPING TO SAME STATEMENT. ONLY NO OF KEYWRODS MATCHED
-     * ARE OF NO USE.
-     *
-     * This method sets the question ids in the statement matcher. It sets the question id with maximum count of
-     * keywords matched with this statement. If many questions have same count, it sets all of those ids in the matcher.
-     *
-     */
-    /*private void setQuestionIds(final Map<Integer, Integer> questionToCountMap,
-            final StatementToAnswerAndQuestionMatcher stmtMatcher) {
-        if (MapUtils.isNotEmpty(questionToCountMap)) {
-            Integer highestCountSoFar = Integer.MIN_VALUE;
-
-            final Set<Integer> questionIds = new HashSet<>(sysConfig.getIntNoOfQuestions() * 2);
-
-            for (final Entry<Integer, Integer> entry : questionToCountMap.entrySet()) {
-                final int comparison = entry.getValue().compareTo(highestCountSoFar);
-                if (comparison >= Constants.ZERO) {
-                    if (comparison > Constants.ZERO) {
-                        questionIds.clear();
-                        highestCountSoFar = entry.getValue();
-                    }
-
-                    questionIds.add(entry.getKey());
-                }
-            }
-
-            // stmtMatcher.setQuestionIds(questionIds);
-        }
-    }*/
 
     private void setAnswerIds(final Set<TrieNode<String>> foundAnswerTerms,
             final StatementToAnswerAndQuestionMatcher stmtMatcher) {

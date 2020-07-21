@@ -14,21 +14,21 @@ import sahaj.wiki.sushil.keyword.trie.TrieNode;
 
 /**
  * This class will build the {@link Trie} of type {@link String} for the keywords appearing in all the questions.
- * 
+ *
  *                              root
  *                               |
- *          _____________________________________________                                 
+ *          _____________________________________________
  *         |                                             |
- *       This                                          Answer     
+ *       This                                          Answer
  *         |                                             |
  *        is                                            two(id = 1)
- *         |                                             
- *       answer                                             
- *         |        
+ *         |
+ *       answer
+ *         |
  *     ______________
  *    |              |
  *    one(id = 2)  three(id = 0)
- *    
+ *
  */
 public class TrieBasedAnswerKeywordBuilder implements KeywordsBuilder<Trie<String>> {
     private static final Logger logger = LogManager.getLogger(TrieBasedAnswerKeywordBuilder.class);
@@ -61,7 +61,9 @@ public class TrieBasedAnswerKeywordBuilder implements KeywordsBuilder<Trie<Strin
                 added = trie.add(added, term);
             }
 
+            // Append input sequence as answer id to mark the end of an answer.
             if (null != added) {
+                logger.info("Successfully stored given answer {} with original no {} in the trie.", answer, answerId);
                 added.addId(answerId);
                 answerId++;
             }

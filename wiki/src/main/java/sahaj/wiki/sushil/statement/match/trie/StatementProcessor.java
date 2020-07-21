@@ -65,9 +65,6 @@ public class StatementProcessor {
             final StatementToAnswerAndQuestionMatcher stmtMatched = stmtMatcher
                     .parseAndMatchStatementWithAnswerAndQuestion(stmt, stmtId, answerKeywords, questionKeywords);
 
-            // THIS APPROACH WAS A FAILURE
-            // processEachStatement(stmtMatched, correctAnswerList);
-
             getAnswerFromStatement(stmtMatched, correctAnswerList);
         }
 
@@ -142,92 +139,22 @@ public class StatementProcessor {
         stmtMatched.setQuestionId(questionIdToCountMap.keySet().iterator().next());
     }
 
-
-    // FAILED APPROACH------>
-    /* private void processEachStatement(final StatementToAnswerAndQuestionMatcher stmtMatched,
-            final String[] correctAnswerList) {
-        final Set<Integer> questionIds = stmtMatched.getQuestionIds();
-        if (CollectionUtils.isEmpty(questionIds)) {
-            return;
-        }
-
-        final Set<Integer> answerIds = stmtMatched.getAnswerIds();
-
-        if (CollectionUtils.isEmpty(answerIds)) {
-            return;
-        }
-
-        final List<String> answers = parsedInput.get(ElementType.ANSWER);
-
-        logger.info("Mapping of answer(s) {} and question(s) {} is found for this statement {}",
-                stmtMatched.getAnswerIds(), stmtMatched.getQuestionIds(), stmtMatched.getStatementId());*/
-
-    /*
-     * If 1 question and 1 answer id were found against this statement, it is straightforward.
+    /**
+     * When many answers are mapped to the same statement, we make the best guess that the answer with higher length is
+     * the 1 which truly maps.
      *
-     *
-     * THESE ASSUMPTIONS ARE WRONG -----> Many questions and answers can perfectly map same statement and both be very different.
-     * eg.
-     * Stmt = I like to play Cricket.
-     * Q1 = Who likes to play Cricket?
-     * Q2 = What do I like to play?
-     * A1 = I
-     * A2 = Cricket
-     *
-     * Not only these assumptions, but whole Trie based solution is wrong as it will also fail to directly relate any question with answer.
-     * Above example also highlighted this issue.
-     *
-     * <strike>
-     * If more answers than questions were mapped, that means there are 2 questions which will have same answer.
-     * But we have got only 1 of such questions mapped to this statement. Any of the question ids can be thus
-     * mapped to this question id for now. If same number of questions and answers were mapped, any answer can be
-     * against any of matched question number sequence.
-     *
-     * Situation gets tricky when there are more questions mapped to an answer. It means there are multiple
-     * questions with same number of keywords matched with this statement. Then we need to determine which question
-     * maps more closely with this statement. We should provide different strategies to resolve the collision. We
-     * should accept the strategy to be used as a property. As of now, only RANDOM strategy is supported.
-     * </strike>
-     *
+     * @param correctAnswerSequence
+     *            Array of {@link String} which will hold the answers in correct sequence when the statements are
+     *            processed.
+     * @param stmtMatchData
+     *            {@link StatementToAnswerAndQuestionMatcher} object detailing which answer and question maps to this
+     *            Statement.
      */
+    private void processForMultipleAnswersOneQuestion(final String[] correctAnswerSequence,
+            final StatementToAnswerAndQuestionMatcher stmtMatchData) {
+        final int questionId = stmtMatchData.getQuestionId();
 
-    /*final int mappedNoOfQuestions = questionIds.size();
-    final int mappedNoOfAnswers = answerIds.size();
-
-    if (mappedNoOfAnswers == Constants.ONE && mappedNoOfQuestions == Constants.ONE) {
-        final String matchedAnswer = answers.get(answerIds.iterator().next());
-        logger.info("Setting answer {} to all mapped question index {}.", matchedAnswer,
-                stmtMatched.getQuestionIds());
-        questionIds.forEach(questionId -> correctAnswerList[questionId] = matchedAnswer);
-        return;
-    }
-
-    if (mappedNoOfAnswers > Constants.ONE && mappedNoOfQuestions == Constants.ONE) {
-        processForMultipleAnswersOneQuestion(correctAnswerList, stmtMatched);
-        return;
-    }*/
-
-
-    // Below code is crap.
-
-    /*
-     * if (mappedNoOfQuestions == mappedNoOfAnswers || mappedNoOfAnswers > mappedNoOfQuestions) { final String
-     * matchedAnswer = answers.get(answerIds.iterator().next());
-     *
-     * logger.debug("Setting same answer {} to all mapped question indices {}.", matchedAnswer,
-     * stmtMatched.getQuestionIds()); questionIds.forEach(questionId -> correctAnswerList[questionId] =
-     * matchedAnswer); } else { // More questions than answers are mapped final QuestionCollisionResolverStrategy
-     * collisionResolver = QuestionCollisionResolverStrategy
-     * .valueOf(sysConfig.getQuestionCollisionResolverStrategy()); final int questionId =
-     * collisionResolver.resolveQuestionCollision(rawInput, stmtMatched); }
-     */
-    // }
-
-    private void processForMultipleAnswersOneQuestion(final String[] correctAnswerList,
-            final StatementToAnswerAndQuestionMatcher stmtMatched) {
-        final int questionId = stmtMatched.getQuestionId();
-
-        final Set<Integer> answerIds = stmtMatched.getAnswerIds();
+        final Set<Integer> answerIds = stmtMatchData.getAnswerIds();
 
         final List<String> answers = parsedInput.get(ElementType.ANSWER);
         int maxLength = 0;
@@ -242,7 +169,7 @@ public class StatementProcessor {
             }
         }
 
-        correctAnswerList[questionId] = answer;
+        correctAnswerSequence[questionId] = answer;
     }
 
     private void validateThatAllFieldsAreSet(final StatementProcessorBuilder builder) {
