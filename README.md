@@ -22,3 +22,29 @@ subgenus Hippotigris; the plains zebra, the Grévy's zebra and the mountain zebr
 Grévy's zebra and the mountain zebra
 aims to breed zebras that are phenotypically similar to the quagga horses and donkeys
 the plains zebra, the Grévy's zebra and the mountain zebra subgenus Hippotigris
+
+
+
+# Solution
+Considered 2 approaches at first -
+1. Inverted Index
+2. Trie for answers and HashMap for Questions. Parse each word in each statement and match with answer and question at the same time.
+
+Approach taken - Option 2.
+	Decided against the inverted index thinking Option 2 will be more space efficient.
+
+Starting point - Solution.java
+
+Test class to be used - SolutionTest.java
+
+
+# Assumptions / Limitations
+1. The solution will not work if the statement contains character . before actual end of the statement.
+2. If the questions have different voices (active/passive), the solution will not work.
+3. Collision resolution for the question is fragile and based on the number of total words against the keyword %.
+4. It is assumed that only 1 question and answer maps to any statement in the paragraph. So, in case of multiple
+   answers and questions mapping to the same statement the solution can't give the accuracy.
+
+
+# Observation
+Inverted index would have been a better choice and could have given more accuracy.
